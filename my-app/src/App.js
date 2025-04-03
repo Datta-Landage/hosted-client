@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   const [activeURL, setActiveURL] = useState('https://hosted-client.vercel.app'); // Default to cloud URL
   const cloudURL = 'https://hosted-client.vercel.app'; // Cloud URL (Vercel)
-  const localURL = 'http://192.168.0.100'; // Local server URL
+  const localURL = 'http://192.168.1.5'; // Local server URL
 
   // Function to check cloud server availability
   const checkCloudAvailability = async () => {
