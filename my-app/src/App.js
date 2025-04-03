@@ -1,6 +1,35 @@
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
+  const [activeURL, setActiveURL] = useState('https://hosted-client.vercel.app'); // Default to cloud URL
+  const cloudURL = 'https://hosted-client.vercel.app'; // Cloud URL (Vercel)
+  const localURL = 'http://192.168.0.100'; // Local server URL
+
+  // Function to check cloud server availability
+  const checkCloudAvailability = async () => {
+    try {
+      console.log('Checking cloud server availability...');
+      const response = await fetch(`${cloudURL}/index.html`, { method: 'HEAD', mode: 'no-cors' });
+
+      if (response.ok) {
+        console.log('Cloud server is reachable.');
+        setActiveURL(cloudURL); // Cloud is reachable, continue with cloud
+      } else {
+        console.log('Cloud server is not reachable. Falling back to local server.');
+        setActiveURL(localURL); // Fallback to local server if cloud is not reachable
+      }
+    } catch (err) {
+      console.log('Error reaching cloud server. Falling back to local server.');
+      setActiveURL(localURL); // If cloud is unreachable, fall back to local server
+    }
+  };
+
+  // Check cloud server availability on component mount
+  useEffect(() => {
+    checkCloudAvailability();
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent the default form submission behavior
     const serverIP = event.target.elements[0].value;
@@ -33,6 +62,9 @@ function App() {
             Test Connection
           </button>
         </form>
+
+        <p>Current active server URL: {activeURL}</p>
+        <p>Open this URL in a new tab to test: <a href={activeURL} target="_blank" rel="noopener noreferrer">{activeURL}</a></p>
       </header>
     </div>
   );
