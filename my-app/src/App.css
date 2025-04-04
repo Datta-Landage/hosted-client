@@ -141,3 +141,157 @@ p {
   color: #ccc;
   font-size: 0.9rem;
 }
+
+.App {
+  text-align: center;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.offline-banner {
+  background: #ffe5e5;
+  border: 2px solid #ff4d4d;
+  color: #cc0000;
+  padding: 1rem;
+  margin: 2rem auto;
+  max-width: 400px;
+  border-radius: 10px;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+.offline-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: #cc0000;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.offline-btn:hover {
+  background: #a80000;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(204, 0, 0, 0.7);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(204, 0, 0, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(204, 0, 0, 0);
+  }
+}
+
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+}
+
+.App-header {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  width: 90%;
+  max-width: 400px;
+  margin-top: 20px;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+h1.animated-title {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  animation: slideIn 1s ease-in-out;
+}
+
+p.animated-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  animation: fadeIn 2s ease-in-out;
+}
+
+.offline-banner,
+.online-banner {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 1rem;
+  margin: 2rem auto;
+  max-width: 400px;
+  border-radius: 10px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.offline-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  background: #cc0000;
+  color: #fff;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.offline-btn:hover {
+  background: #a80000;
+}
+
+.App-footer {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 10px 10px rgba(255, 255, 255, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+  }
+}
