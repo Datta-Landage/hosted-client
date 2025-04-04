@@ -1,45 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
+import React, { useEffect } from 'react';
 
 function App() {
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
-
   useEffect(() => {
-    const goOffline = () => setIsOffline(true);
-    const goOnline = () => setIsOffline(false);
+    const redirectIfOffline = () => {
+      if (!navigator.onLine) {
+        console.warn('📡 Offline detected. Redirecting to Google...');
+        window.location.href = 'https://google.com'; // Just for testing redirect
+      }
+    };
 
-    window.addEventListener('offline', goOffline);
-    window.addEventListener('online', goOnline);
+    // Run once on load
+    redirectIfOffline();
 
-    // Check immediately on load (in case event missed)
-    if (!navigator.onLine) {
-      setIsOffline(true);
-    }
+    // Listen for future disconnects
+    window.addEventListener('offline', redirectIfOffline);
 
     return () => {
-      window.removeEventListener('offline', goOffline);
-      window.removeEventListener('online', goOnline);
+      window.removeEventListener('offline', redirectIfOffline);
     };
   }, []);
 
   return (
-    <div className="App">
-      <h1>HiPalz Cloud App</h1>
-
-      {isOffline && (
-        <div className="offline-banner">
-          <p>🚫 <strong>You are offline</strong></p>
-          <p>Tap below to use your offline version (LAN):</p>
-          <a
-            className="offline-btn"
-            href="http://192.168.0.2"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            🔄 Open Local App
-          </a>
-        </div>
-      )}
+    <div style={{ textAlign: 'center', paddingTop: '3rem' }}>
+      <h1>✅ You are online</h1>
+      <p>If you disconnect internet, you’ll be redirected to <strong>Google</strong>.</p>
     </div>
   );
 }

@@ -5,19 +5,20 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const fallbackLAN = 'http://192.168.0.2';
-const cloudURL = 'https://hosted-client.vercel.app';
+const fallbackURL = 'https://google.com'; // ✅ Redirect target (just for test)
+const testURL = 'https://hosted-client.vercel.app'; // ✅ Cloud app you want to test
 
-// ✅ Accurate fetch check with timeout
+// ✅ Accurate test with timeout (2s)
 async function checkCloudReachable() {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2s timeout
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
 
-    await fetch(`${cloudURL}/version.json`, {
-      method: 'GET',
-      signal: controller.signal,
+    await fetch(testURL, {
+      method: 'HEAD',
+      mode: 'no-cors', // allow test to pass even without response body
       cache: 'no-store',
+      signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
@@ -31,26 +32,16 @@ async function checkCloudReachable() {
   const online = await checkCloudReachable();
 
   if (online) {
-    console.log('✅ Cloud is reachable, rendering app');
+    console.log('✅ Cloud reachable — rendering app');
     root.render(
       <React.StrictMode>
         <App />
       </React.StrictMode>
     );
   } else {
-    console.warn('❌ Cloud unreachable, redirecting to LAN');
-    window.location.href = fallbackLAN;
+    console.warn('❌ Cloud unreachable — redirecting to fallback');
+    window.location.href = fallbackURL;
   }
 })();
 
 reportWebVitals();
-
-// ✅ Register service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/service-worker.js')
-      .then((reg) => console.log('✅ Service Worker registered:', reg.scope))
-      .catch((err) => console.error('❌ SW registration failed:', err));
-  });
-}
