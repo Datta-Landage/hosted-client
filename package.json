@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "react-app-rewired": "^2.2.1",
+    "workbox-webpack-plugin": "^7.3.0"
+  }
+}
