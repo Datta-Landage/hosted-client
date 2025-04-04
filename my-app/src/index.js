@@ -1,27 +1,33 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-// ✅ REMOVE or comment out serviceWorkerRegistration for now
-// import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// ⬇️ Wrap root in basic offline check
-if (!navigator.onLine) {
-  console.warn('🚫 Offline detected. Redirecting to LAN server...');
-  window.location.href = 'http://192.168.0.2'; // 👈 Your self-hosted server
-} else {
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-}
+const cloudURL = 'https://hosted-client.vercel.app';
 
-// Optional: monitor for future disconnects
+const checkCloudReachable = async () => {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+
+    await fetch(cloudURL, {
+      method: 'HEAD',
+      mode: 'no-cors',
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeout);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  } catch (err) {
+    console.warn('🌐 Cloud unreachable. Redirecting to LAN...');
+    window.location.href = 'http://192.168.0.2';
+  }
+};
+
+checkCloudReachable();
+
+// Optional: monitor for disconnect after page load
 window.addEventListener('offline', () => {
   console.warn('📡 Lost internet. Redirecting to local...');
   window.location.href = 'http://192.168.0.2';
