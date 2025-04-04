@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 function App() {
   useEffect(() => {
     const redirectToLAN = () => {
-      const localIP = 'http://192.168.1.5'; // Replace with your LAN server IP
+      const localIP = 'http://192.168.0.101'; // Replace with your LAN server IP
       console.log('Internet is down. Redirecting to LAN app...');
       window.location.href = localIP;
     };
