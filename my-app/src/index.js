@@ -3,17 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'; // ✅ Enabled!
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const cloudURL = 'https://hosted-client.vercel.app';
-const fallbackLAN = 'http://192.168.0.2';
+const fallbackLAN = 'http://192.168.0.2'; // 👈 Your LAN fallback
 
-// ✅ Try loading a cloud-hosted image (favicon) to verify internet
+// 🌐 Test cloud reachability using favicon
 const testImage = new Image();
 testImage.onload = () => {
-  console.log('✅ Cloud reachable — rendering app normally');
+  console.log('✅ Cloud reachable — rendering app');
   root.render(
     <React.StrictMode>
       <App />
@@ -21,31 +20,47 @@ testImage.onload = () => {
   );
 };
 testImage.onerror = () => {
-  console.warn('❌ Cloud unreachable. Checking if PWA offline mode is ready...');
+  console.warn('❌ Cloud unreachable. Checking offline mode...');
 
-  // If no service worker cache → redirect to LAN
-  if (!navigator.serviceWorker) {
-    console.warn('❌ No service worker available. Redirecting to LAN...');
-    window.location.href = fallbackLAN;
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready
+      .then(() => {
+        console.log('📦 Service worker ready. Showing cached PWA...');
+        root.render(
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        );
+      })
+      .catch(() => {
+        console.warn('⚠️ No service worker ready. Redirecting to LAN...');
+        window.location.href = fallbackLAN;
+      });
   } else {
-    console.log('📦 Service worker may serve cached content...');
-    // Let the browser show cached PWA app if installed or precached
-    root.render(
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    );
+    console.warn('❌ Service Worker not supported. Redirecting to LAN...');
+    window.location.href = fallbackLAN;
   }
 };
 testImage.src = `${cloudURL}/favicon.ico`;
 
-// Optional: Redirect if you lose connection while browsing
+// 🌐 Redirect if connection lost while using app
 window.addEventListener('offline', () => {
   console.warn('📡 Offline detected during session. Redirecting to LAN...');
   window.location.href = fallbackLAN;
 });
 
-reportWebVitals();
+// ✅ Manual service worker registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((reg) => {
+        console.log('✅ Service Worker registered:', reg.scope);
+      })
+      .catch((err) => {
+        console.error('❌ Service Worker registration failed:', err);
+      });
+  });
+}
 
-// ✅ Enable PWA support
-serviceWorkerRegistration.register();
+reportWebVitals();
